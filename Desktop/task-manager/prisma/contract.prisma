@@ -1,12 +1,21 @@
 
-// use prisma-8
+ // use prisma-8
 
 model Task {
   id          Int           @id @default(autoincrement())
   title       VarChar(255)
   description String?
   completed   Boolean       @default(false)
-  createdAt TimestampString @default(now()) @map("created_at")
+  createdAt   TimestampString @default(now()) @map("created_at")
+  userId      String        @map("user_id")
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tasks")
+}
+
+model User {
+  id    String @id
+  tasks Task[]
+
+  @@map("user")
 }

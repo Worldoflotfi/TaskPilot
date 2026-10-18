@@ -18,7 +18,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'c4e7852f027d52fb29421a58bb1cafd55382245b433a1a3ceca11f92ebff1988'>;
+  StorageHashBase<'686128db638190b586a653ddc301849ad1893b39a770272107bbb73db9feec05'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
@@ -239,7 +239,9 @@ export type FieldOutputTypes = {
       readonly description: CodecTypes['pg/text@1']['output'] | null;
       readonly id: CodecTypes['pg/int4@1']['output'];
       readonly title: Varchar<255>;
+      readonly userId: CodecTypes['pg/text@1']['output'];
     };
+    readonly User: { readonly id: CodecTypes['pg/text@1']['output'] };
   };
 };
 export type FieldInputTypes = {
@@ -250,7 +252,9 @@ export type FieldInputTypes = {
       readonly description: CodecTypes['pg/text@1']['input'] | null;
       readonly id: CodecTypes['pg/int4@1']['input'];
       readonly title: CodecTypes['sql/varchar@1']['input'];
+      readonly userId: CodecTypes['pg/text@1']['input'];
     };
+    readonly User: { readonly id: CodecTypes['pg/text@1']['input'] };
   };
 };
 export type StorageColumnTypes = {
@@ -261,7 +265,9 @@ export type StorageColumnTypes = {
       readonly description: CodecTypes['pg/text@1']['output'] | null;
       readonly id: CodecTypes['pg/int4@1']['output'];
       readonly title: Varchar<255>;
+      readonly user_id: CodecTypes['pg/text@1']['output'];
     };
+    readonly user: { readonly id: CodecTypes['pg/text@1']['output'] };
   };
 };
 export type StorageColumnInputTypes = {
@@ -272,7 +278,9 @@ export type StorageColumnInputTypes = {
       readonly description: CodecTypes['pg/text@1']['input'] | null;
       readonly id: CodecTypes['pg/int4@1']['input'];
       readonly title: CodecTypes['sql/varchar@1']['input'];
+      readonly user_id: CodecTypes['pg/text@1']['input'];
     };
+    readonly user: { readonly id: CodecTypes['pg/text@1']['input'] };
   };
 };
 
@@ -283,13 +291,21 @@ export namespace Models {
     description: CodecTypes['pg/text@1']['output'] | null;
     id: CodecTypes['pg/int4@1']['output'];
     title: Varchar<255>;
-    readonly [RelationKeys]?: never;
+    userId: CodecTypes['pg/text@1']['output'];
+    user: public_User;
+    readonly [RelationKeys]?: 'user';
+  };
+  export type public_User = {
+    id: CodecTypes['pg/text@1']['output'];
+    tasks: public_Task[];
+    readonly [RelationKeys]?: 'tasks';
   };
 }
 
 export declare const models: {
   public: {
     Task: Models.public_Task;
+    User: Models.public_User;
   };
 };
 
@@ -353,6 +369,46 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 255 };
                   readonly many: false;
                 };
+                readonly user_id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'tasks_user_id_idx_6c952402';
+                  readonly prefix: 'tasks_user_id_idx';
+                  readonly columns: readonly ['user_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'tasks';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'user';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly user: {
+              columns: {
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
               };
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [];
@@ -371,6 +427,7 @@ type ContractBase = Omit<
   readonly targetFamily: 'sql';
   readonly roots: {
     readonly tasks: { readonly namespace: 'public' & NamespaceId; readonly model: 'Task' };
+    readonly user: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
   };
   readonly domain: {
     readonly namespaces: {
@@ -405,8 +462,22 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 255 };
                 };
               };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
             };
-            readonly relations: Record<string, never>;
+            readonly relations: {
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
             readonly storage: {
               readonly table: 'tasks';
               readonly namespaceId: 'public';
@@ -416,7 +487,31 @@ type ContractBase = Omit<
                 readonly description: { readonly column: 'description' };
                 readonly id: { readonly column: 'id' };
                 readonly title: { readonly column: 'title' };
+                readonly userId: { readonly column: 'user_id' };
               };
+            };
+          };
+          readonly User: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly tasks: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Task' };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'user';
+              readonly namespaceId: 'public';
+              readonly fields: { readonly id: { readonly column: 'id' } };
             };
           };
         };

@@ -1,39 +1,44 @@
+
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const taskId = Number(id);
 
     if (!Number.isInteger(taskId) || taskId < 1) {
-      return Response.json(
-        { error: "Invalid task ID" },
-        { status: 400 }
-      );
+      return Response.json({ error: "Invalid task ID" }, { status: 400 });
     }
 
     const body = await request.json();
 
-    
+    // Only update completion status when completed is a boolean.
     if (typeof body?.completed === "boolean") {
       const updatedTask = await db.orm.public.Task
-        .where({ id: taskId })
+        .where({ id: taskId, userId: session.user.id })
         .update({ completed: body.completed });
 
       if (!updatedTask) {
-        return Response.json(
-          { error: "Task not found" },
-          { status: 404 }
-        );
+        return Response.json({ error: "Task not found" }, { status: 404 });
       }
 
       return Response.json(updatedTask);
     }
 
-    // Update title and description
+    // Otherwise, validate title and description.
     if (
       typeof body?.title !== "string" ||
       typeof body?.description !== "string"
@@ -48,10 +53,7 @@ export async function PATCH(
     const description = body.description.trim();
 
     if (!title) {
-      return Response.json(
-        { error: "Task title is required" },
-        { status: 400 }
-      );
+      return Response.json({ error: "Task title is required" }, { status: 400 });
     }
 
     if (title.length > 255) {
@@ -62,23 +64,16 @@ export async function PATCH(
     }
 
     const updatedTask = await db.orm.public.Task
-      .where({ id: taskId })
-      .update({
-        title,
-        description: description || null,
-      });
+      .where({ id: taskId, userId: session.user.id })
+      .update({ title, description: description || null });
 
     if (!updatedTask) {
-      return Response.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+      return Response.json({ error: "Task not found" }, { status: 404 });
     }
 
     return Response.json(updatedTask);
   } catch (error) {
     console.error("Failed to update task:", error);
-
     return Response.json(
       { error: "Failed to update task" },
       { status: 500 }
@@ -86,41 +81,40 @@ export async function PATCH(
   }
 }
 
-
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const taskId = Number(id);
 
     if (!Number.isInteger(taskId) || taskId < 1) {
-      return Response.json(
-        { error: "Invalid task ID" },
-        { status: 400 }
-      );
+      return Response.json({ error: "Invalid task ID" }, { status: 400 });
     }
 
     const deletedTask = await db.orm.public.Task
-      .where({ id: taskId })
+      .where({ id: taskId, userId: session.user.id })
       .delete();
 
     if (!deletedTask) {
-      return Response.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+      return Response.json({ error: "Task not found" }, { status: 404 });
     }
 
     return Response.json({ message: "Task deleted successfully" });
   } catch (error) {
     console.error("Failed to delete task:", error);
-
     return Response.json(
       { error: "Failed to delete task" },
       { status: 500 }
     );
   }
 }
-
