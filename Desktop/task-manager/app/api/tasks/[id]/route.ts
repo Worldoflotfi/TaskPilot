@@ -2,6 +2,8 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+// import { dataType } from "@prisma/orm-postgres/components";
+import type { Varchar } from "@prisma/orm-postgres/target/codec-types";
 
 export async function PATCH(
   request: Request,
@@ -23,13 +25,31 @@ export async function PATCH(
       return Response.json({ error: "Invalid task ID" }, { status: 400 });
     }
 
-    const body = await request.json();
+    let body: unknown;
+
+try {
+  body = await request.json();
+} catch {
+  return Response.json(
+    { error: "Invalid JSON request body" },
+    { status: 400 }
+  );
+}
+
+if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  return Response.json(
+    { error: "Request body must be a JSON object" },
+    { status: 400 }
+  );
+}
+
+const data = body as Record<string, unknown>;
 
     // Only update completion status when completed is a boolean.
-    if (typeof body?.completed === "boolean") {
+    if (typeof data?.completed === "boolean") {
       const updatedTask = await db.orm.public.Task
         .where({ id: taskId, userId: session.user.id })
-        .update({ completed: body.completed });
+        .update({ completed: data.completed });
 
       if (!updatedTask) {
         return Response.json({ error: "Task not found" }, { status: 404 });
@@ -40,8 +60,8 @@ export async function PATCH(
 
     // Otherwise, validate title and description.
     if (
-      typeof body?.title !== "string" ||
-      typeof body?.description !== "string"
+      typeof data?.title !== "string" ||
+      typeof data?.description !== "string"
     ) {
       return Response.json(
         { error: "Title and description are required" },
@@ -49,8 +69,17 @@ export async function PATCH(
       );
     }
 
-    const title = body.title.trim();
-    const description = body.description.trim();
+    const title = data.title.trim();
+    const description = data.description.trim();
+
+    
+
+    if (description.length > 5000) {
+      return Response.json(
+        { error: "Description must be 5000 characters or fewer" },
+        { status: 400 }
+      );
+    }
 
     if (!title) {
       return Response.json({ error: "Task title is required" }, { status: 400 });
@@ -62,10 +91,10 @@ export async function PATCH(
         { status: 400 }
       );
     }
-
+    const validatedTitle = title as Varchar<255>;
     const updatedTask = await db.orm.public.Task
       .where({ id: taskId, userId: session.user.id })
-      .update({ title, description: description || null });
+      .update({ title:validatedTitle, description: description || null });
 
     if (!updatedTask) {
       return Response.json({ error: "Task not found" }, { status: 404 });
