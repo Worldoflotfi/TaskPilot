@@ -1,23 +1,39 @@
+
 @import "tailwindcss";
 
 :root {
   color-scheme: light;
-  --background: #fafaff;
-  --foreground: #17172b;
-  --surface: rgba(255, 255, 255, 0.88);
-  --surface-border: rgba(255, 255, 255, 0.95);
-  --muted: #696b80;
+
+  --background: #f5f6fb;
+  --foreground: #191a24;
+  --surface: rgba(255, 255, 255, 0.62);
+  --surface-solid: #ffffff;
+  --surface-border: rgba(255, 255, 255, 0.8);
+  --muted: #6b7080;
   --accent: #4f46e5;
+  --accent-hover: #4338ca;
+
+  --glass-blur: 24px;
+  --glass-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .dark {
   color-scheme: dark;
-  --background: #101116;
-  --foreground: #f4f4fa;
-  --surface: rgba(31, 32, 42, 0.76);
+
+  --background: #0c0d12;
+  --foreground: #f5f5fa;
+  --surface: rgba(30, 32, 42, 0.58);
+  --surface-solid: #1e202a;
   --surface-border: rgba(255, 255, 255, 0.1);
-  --muted: #a1a1b4;
-  --accent: #818cf8;
+  --muted: #a4a6b6;
+  --accent: #9297ff;
+  --accent-hover: #a8acff;
+
+  --glass-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 @theme inline {
@@ -30,21 +46,67 @@
 html {
   min-height: 100%;
   background: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100%;
-  background: var(--background);
+  background:
+    radial-gradient(
+      ellipse at 10% 0%,
+      rgba(129, 140, 248, 0.12),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 90% 15%,
+      rgba(96, 165, 250, 0.09),
+      transparent 40%
+    ),
+    var(--background);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
   transition: background-color 250ms ease, color 250ms ease;
 }
 
 ::selection {
-  background: rgba(79, 70, 229, 0.2);
+  background: rgba(99, 102, 241, 0.25);
 }
 
-/* html:not(.dark) header nav {
-  background-color: #ffffff !important;
-  /* opacity: 0.9 !important; */
- 
+/* Reusable Liquid Glass surface */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+}
+
+/* More opaque glass for important panels */
+.glass-strong {
+  background: color-mix(in srgb, var(--surface) 85%, var(--background));
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+}
+
+/* Consistent interactive transitions */
+.glass-interactive {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body,
+  .glass-interactive {
+    transition: none;
+  }
+}

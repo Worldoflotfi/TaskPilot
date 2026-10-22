@@ -45,10 +45,10 @@ export default function Navbar() {
       <nav
         aria-label="Main navigation"
         className="mx-auto flex max-w-7xl items-center justify-between gap-4
-  rounded-2xl border border-white bg-white px-4 py-3
-  shadow-lg shadow-indigo-100/40
-  backdrop-blur-2xl transition-all duration-300
-  dark:border-white/10 dark:bg-zinc-900/70"
+        rounded-2xl border border-(--surface-border)
+        bg-transparent px-4 py-3
+        shadow-(--glass-shadow)]
+        transition-all duration-300"
       >
         {/* Brand */}
         <Link
@@ -77,9 +77,8 @@ export default function Navbar() {
             </svg>
           </span>
 
-          <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-            Task
-            <span className="text-indigo-600 dark:text-indigo-400">Pilot</span>
+          <span className="text-lg font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
+            TaskPilot
           </span>
         </Link>
 
@@ -117,7 +116,7 @@ export default function Navbar() {
             title={isDark ? "Light theme" : "Dark theme"}
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className="flex size-10 items-center justify-center rounded-xl
-  border border-white/90 bg-white/80 text-slate-600
+            border border-white/90 bg-white/80 text-slate-600
   shadow-sm shadow-slate-200/40
   transition-all hover:scale-105 hover:border-indigo-200
   hover:bg-indigo-50 hover:text-indigo-600
