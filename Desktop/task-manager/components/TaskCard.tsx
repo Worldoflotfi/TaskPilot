@@ -1,4 +1,3 @@
-
 interface TaskCardProps {
   title: string;
   description: string;
@@ -20,10 +19,10 @@ export default function TaskCard({
 }: TaskCardProps) {
   return (
     <article
-      className={`group relative overflow-hidden rounded-2xl border bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-6 ${
+      className={`glass group relative overflow-hidden rounded-2xl p-5 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl sm:p-6 ${
         completed
-          ? "border-emerald-100 hover:shadow-emerald-900/5"
-          : "border-slate-200 hover:border-indigo-200 hover:shadow-indigo-900/5"
+          ? "hover:border-emerald-400/40 hover:shadow-emerald-500/10"
+          : "hover:border-indigo-400/50 hover:shadow-indigo-500/10"
       }`}
     >
       <div
@@ -38,8 +37,8 @@ export default function TaskCard({
             <h3
               className={`wrap-break-word text-base font-bold tracking-tight transition sm:text-lg ${
                 completed
-                  ? "text-slate-400 line-through decoration-emerald-400"
-                  : "text-slate-800"
+                  ? "text-[var(--muted)] line-through decoration-emerald-400"
+                  : "text-[var(--foreground)]"
               }`}
             >
               {title}
@@ -61,7 +60,7 @@ export default function TaskCard({
             </span>
           </div>
 
-          <p className="whitespace-pre-wrap wrap-break-word text-sm leading-6 text-slate-500">
+          <p className="whitespace-pre-wrap wrap-break-word text-sm leading-6 text-[var(--muted)]">
             {description || "No description provided."}
           </p>
         </div>
@@ -70,7 +69,8 @@ export default function TaskCard({
           <button
             type="button"
             onClick={onEdit}
-            className="rounded-lg border border-indigo-100 bg-indigo-50 px-3.5 py-2 text-sm font-semibold text-indigo-700 transition duration-200 hover:border-indigo-200 hover:bg-indigo-100 active:scale-95"
+
+            className="glass-interactive rounded-lg border border-indigo-500/25 bg-indigo-500/10 px-3.5 py-2 text-sm font-semibold text-indigo-700 transition duration-200 hover:border-indigo-500/40 hover:bg-indigo-500/15 active:scale-95 dark:text-indigo-300"
           >
             Edit
           </button>
@@ -79,10 +79,11 @@ export default function TaskCard({
             type="button"
             onClick={onToggle}
             disabled={isToggling}
-            className={`rounded-lg px-3.5 py-2 text-sm font-semibold transition duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 ${
+
+            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur-xl ${
               completed
-                ? "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-                : "bg-indigo-600 text-white shadow-sm shadow-indigo-600/15 hover:bg-indigo-700"
+                ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                : "border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-300"
             }`}
           >
             {isToggling ? "Updating..." : completed ? "Undo" : "Complete"}
@@ -91,7 +92,8 @@ export default function TaskCard({
           <button
             type="button"
             onClick={onDelete}
-            className="rounded-lg border border-red-100 bg-white px-3.5 py-2 text-sm font-semibold text-red-600 transition duration-200 hover:border-red-200 hover:bg-red-50 active:scale-95"
+
+            className="glass-interactive rounded-lg border border-red-500/25 bg-red-500/5 px-3.5 py-2 text-sm font-semibold text-red-600 transition duration-200 hover:border-red-500/40 hover:bg-red-500/10 active:scale-95 dark:text-red-300"
           >
             Delete
           </button>

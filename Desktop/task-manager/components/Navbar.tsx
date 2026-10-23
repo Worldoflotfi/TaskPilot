@@ -44,11 +44,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6">
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex max-w-7xl items-center justify-between gap-4
-        rounded-2xl border border-(--surface-border)
-        bg-transparent px-4 py-3
-        shadow-(--glass-shadow)]
-        transition-all duration-300"
+        className="glass mx-auto flex max-w-7xl items-center justify-between gap-4
+  rounded-2xl px-4 py-3
+  transition-all duration-300"
       >
         {/* Brand */}
         <Link
@@ -83,14 +81,16 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation */}
-        <div className="hidden items-center gap-1 rounded-xl bg-slate-900/[0.04] p-1 sm:flex dark:bg-white/[0.06]">
+        <div className="hidden items-center gap-1 rounded-xl
+  border border-slate-200/80 bg-slate-900/6 p-1 sm:flex
+  dark:border-white/10 dark:bg-white/6">
           <Link
             href="/"
             aria-current={pathname === "/" ? "page" : undefined}
             className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
               pathname === "/"
                 ? "bg-white text-indigo-600 shadow-sm dark:bg-white/10 dark:text-indigo-300"
-                : "text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-300"
+                : "text-slate-700 hover:bg-white/70 hover:text-indigo-700 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-indigo-300"
             }`}
           >
             Dashboard
@@ -116,12 +116,15 @@ export default function Navbar() {
             title={isDark ? "Light theme" : "Dark theme"}
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className="flex size-10 items-center justify-center rounded-xl
-            border border-white/90 bg-white/80 text-slate-600
-  shadow-sm shadow-slate-200/40
-  transition-all hover:scale-105 hover:border-indigo-200
-  hover:bg-indigo-50 hover:text-indigo-600
-  dark:border-white/10 dark:bg-white/5
-  dark:text-slate-200 dark:hover:border-indigo-400"
+            border border-indigo-200 bg-indigo-50
+            shadow-md shadow-indigo-200/40
+            transition-all hover:scale-105 hover:border-indigo-300
+            hover:bg-indigo-100 hover:text-indigo-800
+            focus-visible:outline-2 focus-visible:outline-offset-2
+            focus-visible:outline-indigo-600
+            dark:border-white/15 dark:bg-white/10 dark:text-indigo-300
+            dark:shadow-black/20 dark:hover:border-indigo-400
+            dark:hover:bg-indigo-400/15"
           >
             {isDark ? (
               <svg
@@ -178,10 +181,11 @@ export default function Navbar() {
 
             {menuOpen && (
               <div
-                className="absolute right-0 mt-3 w-64 rounded-2xl border
-                  border-white/70 bg-white/90 p-3 shadow-xl
-                  shadow-slate-900/10 backdrop-blur-2xl
-                  dark:border-white/10 dark:bg-zinc-900/95"
+              className="absolute right-0 mt-3 w-64 rounded-2xl border
+              border-slate-200 bg-white/95 p-3
+              shadow-xl shadow-slate-900/15 backdrop-blur-2xl
+              dark:border-white/10 dark:bg-zinc-900/95
+              dark:shadow-black/30"
               >
                 <div className="border-b border-slate-200/70 px-3 py-3 dark:border-white/10">
                   <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
@@ -199,9 +203,12 @@ export default function Navbar() {
                   disabled={signingOut}
                   onClick={handleSignOut}
                   className="mt-2 w-full rounded-xl px-3 py-2.5 text-left
-                    text-sm font-medium text-slate-700 transition-colors
-                    hover:bg-red-50 hover:text-red-600 disabled:opacity-50
-                    dark:text-slate-200 dark:hover:bg-red-500/10 dark:hover:text-red-300"
+  text-sm font-medium text-slate-800 transition-colors
+  hover:bg-red-50 hover:text-red-700
+  focus-visible:outline-2 focus-visible:outline-offset-2
+  focus-visible:outline-red-600 disabled:opacity-50
+  dark:text-slate-200 dark:hover:bg-red-500/10
+  dark:hover:text-red-300"
                 >
                   {signingOut ? "Signing out..." : "Sign out"}
                 </button>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -125,7 +124,9 @@ export default function Home() {
       setTaskToDelete(null);
     } catch (err) {
       console.error("Error deleting task:", err);
-      setError(err instanceof Error ? err.message : "Could not delete the task.");
+      setError(
+        err instanceof Error ? err.message : "Could not delete the task.",
+      );
     } finally {
       setDeletingTaskId(null);
     }
@@ -157,7 +158,9 @@ export default function Home() {
       );
     } catch (err) {
       console.error("Error updating task:", err);
-      setError(err instanceof Error ? err.message : "Could not update the task.");
+      setError(
+        err instanceof Error ? err.message : "Could not update the task.",
+      );
     } finally {
       setTogglingTaskId(null);
     }
@@ -213,11 +216,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent px-4 py-8 text-[var(--foreground)] sm:px-8 sm:py-12">
-      {/* Soft background glows */}
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-indigo-300/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-[28rem] h-72 w-72 rounded-full bg-violet-200/20 blur-3xl" />
-
-      <div className="relative mx-auto max-w-4xl">
+      <div className="relative z-10 mx-auto max-w-4xl">
         <header className="mb-10">
           <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
             <svg
@@ -242,12 +241,14 @@ export default function Home() {
 
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-                TaskPilot<span className="text-indigo-600">.</span>
+              <h1 className="text-4xl font-extrabold tracking-tight dark:text-foreground sm:text-5xl">
+                TaskPilot
+                <span className="text-indigo-600 dark:text-indigo-400">.</span>
               </h1>
+
               <p className="mt-3 max-w-lg text-sm leading-6 text-slate-500 sm:text-base">
-                Clear your mind, organize your priorities, and make progress
-                one task at a time.
+                Clear your mind, organize your priorities, and make progress one
+                task at a time.
               </p>
             </div>
 
@@ -265,9 +266,11 @@ export default function Home() {
           aria-label="Task overview"
           className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3"
         >
-          <div className="group rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-900/5">
+          <div className="glass glass-interactive group rounded-2xl p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-500">Total tasks</p>
+              <p className="text-sm font-medium text-[var(--muted)]">
+                Total tasks
+              </p>
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
                 <svg
                   viewBox="0 0 24 24"
@@ -284,15 +287,19 @@ export default function Home() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            <p className="mt-4 text-3xl font-bold tracking-tight text-[var(--foreground)]">
               {tasks.length}
             </p>
-            <p className="mt-1 text-xs text-slate-400">Tasks in your list</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Tasks in your list
+            </p>
           </div>
 
-          <div className="group rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-900/5">
+          <div className="glass glass-interactive group rounded-2xl p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-500">In progress</p>
+              <p className="text-sm font-medium text-[var(--muted)]">
+                In progress
+              </p>
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
                 <svg
                   viewBox="0 0 24 24"
@@ -307,15 +314,19 @@ export default function Home() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            <p className="mt-4 text-3xl font-bold tracking-tight text-[var(--foreground)]">
               {activeCount}
             </p>
-            <p className="mt-1 text-xs text-slate-400">Ready for your focus</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Ready for your focus
+            </p>
           </div>
 
-          <div className="group rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-900/5">
+          <div className="glass glass-interactive group rounded-2xl p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-500">Completed</p>
+              <p className="text-sm font-medium text-[var(--muted)]">
+                Completed
+              </p>
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                 <svg
                   viewBox="0 0 24 24"
@@ -333,7 +344,7 @@ export default function Home() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            <p className="mt-4 text-3xl font-bold tracking-tight text-[var(--foreground)]">
               {completedCount}
             </p>
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100">
@@ -342,21 +353,21 @@ export default function Home() {
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-[var(--muted)]">
               {progress}% completion rate
             </p>
           </div>
         </section>
 
         {/* Add task */}
-        <section className="mb-10 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-sm">
-          <div className="border-b border-slate-100 bg-gradient-to-r from-indigo-50/80 via-white to-violet-50/50 px-5 py-5 sm:px-7">
+        <section className="glass mb-10 overflow-hidden rounded-2xl">
+          <div className="relative border-b border-[var(--surface-border)] bg-transparent px-5 py-5 sm:px-7">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-xl font-light text-white shadow-md shadow-indigo-600/20">
                 +
               </span>
               <div>
-                <h2 className="font-bold tracking-tight text-slate-900">
+                <h2 className="font-bold tracking-tight text-[var(--foreground)]">
                   Create a task
                 </h2>
                 <p className="mt-0.5 text-sm text-slate-500">
@@ -377,7 +388,7 @@ export default function Home() {
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">
                 Your workflow
               </p>
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">
                 Your tasks
               </h2>
               <p className="mt-1 text-sm text-slate-500">
@@ -385,8 +396,11 @@ export default function Home() {
               </p>
             </div>
 
-            <span className="rounded-full border border-indigo-100 bg-white px-3.5 py-1.5 text-sm font-semibold text-indigo-700 shadow-sm">
-              {filteredTasks.length} shown
+            <span className="rounded-full border border-indigo-300 bg-indigo-500/5 px-3 py-1.5 text-xs font-semibold text-[var(--muted)] backdrop-blur-xl dark:bg-white/5">
+              <span className="text-indigo-600 font-bold">
+                {filteredTasks.length}{" "}
+              </span>
+              shown
             </span>
           </div>
 
@@ -397,7 +411,7 @@ export default function Home() {
               fill="none"
               stroke="currentColor"
               strokeWidth="1.8"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-indigo-500 dark:text-indigo-400"
               aria-hidden="true"
             >
               <circle cx="11" cy="11" r="7" />
@@ -410,7 +424,7 @@ export default function Home() {
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by task title or description..."
               aria-label="Search tasks"
-              className="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100/70"
+              className="glass w-full rounded-xl py-3.5 pl-12 pr-4 text-sm text-[var(--foreground)] outline-none transition duration-200 placeholder:text-[var(--muted)] focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20"
             />
           </div>
 
@@ -430,18 +444,19 @@ export default function Home() {
                   type="button"
                   onClick={() => setFilter(option)}
                   aria-pressed={filter === option}
-                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold capitalize transition duration-200 active:scale-95 ${
+
+                  className={`glass-interactive inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold capitalize transition duration-200 active:scale-95 ${
                     filter === option
-                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                      : "border border-slate-200 bg-white text-slate-600 hover:border-indigo-100 hover:bg-indigo-50/60 hover:text-indigo-700"
+                      ? "border-indigo-400/50 bg-indigo-500/10 text-indigo-700 shadow-sm dark:text-indigo-300"
+                      : "border-transparent bg-transparent text-[var(--muted)] hover:border-[var(--surface-border)] hover:bg-white/30 dark:hover:bg-white/5"
                   }`}
                 >
                   {option}
                   <span
-                    className={`rounded-md px-1.5 py-0.5 text-xs ${
+                    className={`rounded-md border px-1.5 py-0.5 text-xs font-semibold ${
                       filter === option
-                        ? "bg-white/20 text-white"
-                        : "bg-slate-100 text-slate-500"
+                        ? "border-indigo-400/30 bg-indigo-500/15 text-indigo-700 dark:text-indigo-300"
+                        : "border-[var(--surface-border)] bg-white/30 text-[var(--muted)] dark:bg-white/5"
                     }`}
                   >
                     {count}

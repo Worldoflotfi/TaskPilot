@@ -30,7 +30,7 @@ export default function TaskForm({ onAddTask, isAdding }: TaskFormProps) {
       <div>
         <label
           htmlFor="title"
-          className="mb-2 block text-sm font-semibold text-slate-700"
+          className="mb-2 block text-sm font-semibold text-[var(--foreground)]"
         >
           Task title <span className="text-indigo-600">*</span>
         </label>
@@ -43,17 +43,17 @@ export default function TaskForm({ onAddTask, isAdding }: TaskFormProps) {
           placeholder="e.g. Finish the Prisma integration"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100/70"
+          className="glass w-full rounded-xl px-4 py-3 text-sm text-[var(--foreground)] outline-none transition-all duration-200 placeholder:text-[var(--muted)] focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20"
         />
       </div>
 
       <div>
         <label
           htmlFor="description"
-          className="mb-2 block text-sm font-semibold text-slate-700"
+          className="mb-2 block text-sm font-semibold text-[var(--foreground)]"
         >
           Description{" "}
-          <span className="font-normal text-slate-400">(optional)</span>
+          <span className="font-normal text-[var(--muted)]">(optional)</span>
         </label>
 
         <textarea
@@ -62,7 +62,7 @@ export default function TaskForm({ onAddTask, isAdding }: TaskFormProps) {
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           rows={3}
-          className="w-full resize-y rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100/70"
+          className="glass w-full resize-y rounded-xl px-4 py-3 text-sm leading-6 text-[var(--foreground)] outline-none transition-all duration-200 placeholder:text-[var(--muted)] focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20"
         />
       </div>
 

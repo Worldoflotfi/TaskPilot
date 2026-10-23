@@ -1,39 +1,47 @@
-
 @import "tailwindcss";
 
+/* Light theme */
 :root {
   color-scheme: light;
 
-  --background: #f5f6fb;
-  --foreground: #191a24;
-  --surface: rgba(255, 255, 255, 0.62);
+  --background: #f5f7fc;
+  --foreground: #17172b;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-border: rgba(100, 116, 139, 0.28);
   --surface-solid: #ffffff;
-  --surface-border: rgba(255, 255, 255, 0.8);
-  --muted: #6b7080;
-  --accent: #4f46e5;
+  --muted: #64748b;
+
+  --accent: #5145e5;
   --accent-hover: #4338ca;
 
-  --glass-blur: 24px;
+  --glass-blur: 4px;
+  --glass-saturation: 30%;
+
   --glass-shadow:
-    0 8px 32px rgba(31, 38, 135, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 12px 40px rgba(69, 79, 160, 0.12), 0 2px 8px rgba(69, 79, 160, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
 }
 
+/* Dark theme */
 .dark {
   color-scheme: dark;
 
-  --background: #0c0d12;
-  --foreground: #f5f5fa;
-  --surface: rgba(30, 32, 42, 0.58);
+  --background: #101225;
+  --foreground: #f5f5ff;
+
+  --surface: rgba(30, 37, 78, 0.4);
   --surface-solid: #1e202a;
-  --surface-border: rgba(255, 255, 255, 0.1);
-  --muted: #a4a6b6;
+  --surface-border: rgba(195, 201, 255, 0.24);
+  --muted: #b0b6d1;
+
   --accent: #9297ff;
-  --accent-hover: #a8acff;
+  --accent-hover: #b0b4ff;
 
   --glass-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 12px 40px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
 }
 
 @theme inline {
@@ -53,45 +61,73 @@ body {
   min-height: 100%;
   background:
     radial-gradient(
-      ellipse at 10% 0%,
-      rgba(129, 140, 248, 0.12),
-      transparent 45%
+      ellipse at 8% 0%,
+      rgba(137, 143, 255, 0.14),
+      transparent 48%
     ),
     radial-gradient(
-      ellipse at 90% 15%,
-      rgba(96, 165, 250, 0.09),
-      transparent 40%
+      ellipse at 92% 8%,
+      rgba(107, 177, 255, 0.12),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 52% 55%,
+      rgba(177, 143, 255, 0.07),
+      transparent 50%
     ),
     var(--background);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
-  transition: background-color 250ms ease, color 250ms ease;
+  transition:
+    background-color 250ms ease,
+    color 250ms ease;
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.25);
+  background: rgba(99, 102, 241, 0.28);
 }
 
 /* Reusable Liquid Glass surface */
 .glass {
+  position: relative;
+  isolation: isolate;
   background: var(--surface);
   border: 1px solid var(--surface-border);
   box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur)) saturate(170%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+
+  /* Blur the content behind the glass */
+  -webkit-backdrop-filter: blur(var(--glass-blur))
+    saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+}
+/* Fine reflective edge */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.24),
+    transparent 38%,
+    transparent 68%,
+    rgba(255, 255, 255, 0.08)
+  );
+  opacity: 0.85;
 }
 
-/* More opaque glass for important panels */
+/* Stronger glass for menus and important panels */
 .glass-strong {
-  background: color-mix(in srgb, var(--surface) 85%, var(--background));
+  background: color-mix(in srgb, var(--surface) 82%, var(--background));
   border: 1px solid var(--surface-border);
   box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
 }
 
-/* Consistent interactive transitions */
+/* Smooth interactive effects */
 .glass-interactive {
   transition:
     background-color 200ms ease,
