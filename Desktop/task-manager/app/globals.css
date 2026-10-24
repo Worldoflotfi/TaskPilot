@@ -57,32 +57,32 @@ html {
   scroll-behavior: smooth;
 }
 
+
 body {
   min-height: 100%;
   background:
     radial-gradient(
-      ellipse at 8% 0%,
-      rgba(137, 143, 255, 0.14),
-      transparent 48%
-    ),
-    radial-gradient(
-      ellipse at 92% 8%,
-      rgba(107, 177, 255, 0.12),
+      ellipse at 5% 5%,
+      rgba(99, 102, 241, 0.22),
       transparent 42%
     ),
     radial-gradient(
-      ellipse at 52% 55%,
-      rgba(177, 143, 255, 0.07),
-      transparent 50%
+      ellipse at 95% 10%,
+      rgba(56, 189, 248, 0.20),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 50% 65%,
+      rgba(168, 85, 247, 0.16),
+      transparent 48%
     ),
     var(--background);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
-  transition:
-    background-color 250ms ease,
-    color 250ms ease;
+  transition: background-color 250ms ease, color 250ms ease;
 }
+
 
 ::selection {
   background: rgba(99, 102, 241, 0.28);
@@ -96,10 +96,10 @@ body {
   border: 1px solid var(--surface-border);
   box-shadow: var(--glass-shadow);
 
-  /* Blur the content behind the glass */
   -webkit-backdrop-filter: blur(var(--glass-blur))
     saturate(var(--glass-saturation));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur))
+    saturate(var(--glass-saturation));
 }
 /* Fine reflective edge */
 .glass::before {
@@ -136,6 +136,73 @@ body {
     transform 200ms ease;
 }
 
+/* Navbar liquid glass: lighter blur + lens zoom of content behind it */
+.glass-nav {
+  --nav-glass-blur: 2.5px;
+  --nav-glass-zoom: 1.1;
+  --nav-glass-saturate: 165%;
+  isolation: auto;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.glass-nav .nav-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.glass-nav .nav-lens::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scale(var(--nav-glass-zoom));
+  transform-origin: center;
+  -webkit-backdrop-filter: blur(var(--nav-glass-blur))
+    saturate(var(--nav-glass-saturate)) brightness(1.06);
+  backdrop-filter: blur(var(--nav-glass-blur))
+    saturate(var(--nav-glass-saturate)) brightness(1.06);
+  filter: url("#nav-liquid-lens");
+}
+
+.glass-nav.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--surface) 30%, transparent);
+}
+
+.glass-nav.glass::before {
+  z-index: 2;
+  opacity: 0.72;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.1) 26%,
+    transparent 52%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-nav > *:not(.nav-lens) {
+  position: relative;
+  z-index: 3;
+}
+
+.dark .glass-nav.glass::after {
+  background: color-mix(in srgb, var(--surface) 48%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -144,5 +211,13 @@ body {
   body,
   .glass-interactive {
     transition: none;
+  }
+
+  .glass-nav {
+    --nav-glass-zoom: 1;
+  }
+
+  .glass-nav .nav-lens::before {
+    filter: none;
   }
 }

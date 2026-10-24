@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+
   const { theme, setTheme } = useTheme();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,12 +17,12 @@ export default function Navbar() {
 
   const isDark = theme === "dark";
 
-  // Get the current authenticated user from Better Auth.
+    // Get the current authenticated user from Better Auth.
   const { data: session, isPending } = authClient.useSession();
 
-  // Set mounted after the first render.
-  // This effect is declared below through React's useEffect.
-  // See the import and effect in the next step.
+  // Set mounted after the first render
+  // This effect is declared below through React's useEffect
+  // See the import and effect in the next step
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -42,12 +43,43 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6">
+      <svg
+        aria-hidden="true"
+        width="0"
+        height="0"
+        className="absolute"
+      >
+        <filter
+          id="nav-liquid-lens"
+          x="-12%"
+          y="-20%"
+          width="124%"
+          height="140%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.03"
+            numOctaves="2"
+            seed="3"
+            result="noise"
+          />
+          <feGaussianBlur in="noise" stdDeviation="4" result="map" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="map"
+            scale="6"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
+
       <nav
         aria-label="Main navigation"
-        className="glass mx-auto flex max-w-7xl items-center justify-between gap-4
-  rounded-2xl px-4 py-3
-  transition-all duration-300"
+        className="glass glass-nav mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-2xl px-4 py-3 transition-all duration-300"
       >
+        <span className="nav-lens" aria-hidden="true" />
         {/* Brand */}
         <Link
           href="/"
@@ -114,7 +146,12 @@ export default function Navbar() {
               isDark ? "Switch to light theme" : "Switch to dark theme"
             }
             title={isDark ? "Light theme" : "Dark theme"}
-            onClick={() => setTheme(isDark ? "light" : "dark")}
+
+            onClick={() => {
+              console.log("Theme clicked");
+              setTheme(isDark ? "light" : "dark");
+            }}
+
             className="flex size-10 items-center justify-center rounded-xl
             border border-indigo-200 bg-indigo-50
             shadow-md shadow-indigo-200/40
@@ -170,7 +207,12 @@ export default function Navbar() {
               type="button"
               aria-label="Open account menu"
               aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
+              
+              onClick={() => {
+                console.log("Profile button clicked");
+                setMenuOpen((open) => !open);
+              }}
+
               className="flex size-10 items-center justify-center rounded-xl
                 bg-indigo-100 font-semibold text-indigo-700 ring-1
                 ring-indigo-200/80 transition-colors hover:bg-indigo-200
